@@ -2,29 +2,27 @@ import applyCaseMiddleware from 'axios-case-converter';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 
-//type
-/* interface PageResult {
-    GameTitle: string;
-    BlockChain: string;
-    NFT: string;
-    F2P: string;
-    P2E: string;
-    Social: string;
-}
-*/
+const address = 'https://playtoearn.net/blockchaingames?sort=socialscore_24h&direction=desc&page=';
 
-const address = 'https://playtoearn.net/blockchaingames?sort=socialscore_24h&direction=desc&page=1';
+//PageList받기
+//tbody_list안에 있는 게임 이름 50개 받아오기
+//For 이용, 1~35페이지. 1~50번째 게임 이름 받아오기.
+//다른 정보들도 같이 받아오기.
 
-(async () => {
+//엑셀 문서작성
+
+const Test = (async () => {
     const client = applyCaseMiddleware(axios.create());
-    const Req = await client.get(address)
-    const resp = Req.data;
-    const $ = cheerio.load(resp);
-    const CalledData = $('body > div > div > div > tbody > tr > td > a ');
-        
-    console.log(CalledData);
+    const Req = await client.get(address);
+    const $ = cheerio.load(Req.data);
+    const $PageList = $('ul[class=pageination]').last().html();
+    const CalledData = $('div[class=dapp_name]').html();
 
-})
+    console.log($PageList);
+
+})();
+
+Test;
 
 
 
