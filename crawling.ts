@@ -2,7 +2,7 @@ import applyCaseMiddleware from 'axios-case-converter';
 import axios from 'axios';
 import * as cheerio from 'cheerio';
 
-const address = 'https://playtoearn.net/blockchaingames?sort=socialscore_24h&direction=desc&page=';
+const address = 'https://playtoearn.net/blockchaingames?sort=socialscore_24h&direction=desc&page=1';
 
 //PageList받기
 //tbody_list안에 있는 게임 이름 50개 받아오기
@@ -12,22 +12,43 @@ const address = 'https://playtoearn.net/blockchaingames?sort=socialscore_24h&dir
 //엑셀 문서작성
 (async () => {
     let testList: string[] = [];
+    let pageNum = 1;
 
     const client = applyCaseMiddleware(axios.create());
-    const Req = await client.get(address);
-    const $ = cheerio.load(Req.data);
-    const $PageList = $('a[class=page-link]').each(function(i, element) {
 
-    });
-    const CalledData = $('div[class=dapp_name]').each(function(i, element) {
+    //axios (address) with cheeerio
+    const req = await client.get(address);
+    const $ = cheerio.load(req.data);
+
+    //Get PageNumber str to num
+    const $page = $('a[class=page-link]').eq(-2).text();
+    pageNum = Number($page);
+    
+
+    //span태그 하나만 가져오기. 
+
+
+/*
+    $('div[class=dapp_name]').each(function(i, element) {
         testList[i] = $(element).text();
-    });
-    console.log(testList);
+    }
+*/
+    
+//    console.log("Number Of $Page, Type = " + $Page + " " + typeof $Page + "\nType, Page Num is = " + typeof PageNum + " " + PageNum);
+
 })();
 
 
 
 
+
+
+/*
+$('div[class=dapp_name]').each(function(i, element) {
+    testList[i] = $(element).text();
+}
+    const $PageList = $('a[class=page-link]').each(function(i, element) {});
+*/
 
 
 
